@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Data Display</title>
+</head>
+<body>
+
+<div id="articles-container"></div>
+
+<script>
+    // Create a new XMLHttpRequest object
+    var xhr = new XMLHttpRequest();
+
+    // Define the API endpoint
+    var apiEndpoint = 'https://jpfruits.lk/testapi';
+
+    // Open a GET request to the API endpoint
+    xhr.open('GET', apiEndpoint, true);
+
+    // Set custom headers if needed
+    xhr.setRequestHeader('Authorization', 'Bearer your_access_token');
+
+    // Define what happens on successful data submission
+    xhr.onload = function () {
+        // Request was successful, handle the response here
+        var data = JSON.parse(xhr.responseText);
+        displayData(data);
+    };
+
+    // Define what happens in case of error
+    xhr.onerror = function () {
+        // There was an error, handle it here
+        console.error('Error fetching data');
+    };
+
+    // Send the request
+    xhr.send();
+
+    // Function to display data in the HTML page
+    function displayData(data) {
+        var articlesContainer = document.getElementById('articles-container');
+
+        // Iterate over each article in the data array
+        data.forEach(function(article) {
+            // Create HTML elements to display article information
+            var articleDiv = document.createElement('div');
+            articleDiv.classList.add('article');
+
+            var heading = document.createElement('h2');
+            heading.textContent = article.name;
+
+            var image = document.createElement('img');
+            image.src = article.photo;
+            image.alt = article.name;
+
+            var description1 = document.createElement('p');
+            description1.textContent = article.description1;
+
+            var description2 = document.createElement('p');
+            description2.textContent = article.description2;
+
+            var createdAt = document.createElement('small');
+            createdAt.textContent = 'Created at: ' + new Date(article.created_at).toLocaleString();
+
+            // Append created elements to the container
+            articleDiv.appendChild(heading);
+            articleDiv.appendChild(image);
+            articleDiv.appendChild(description1);
+            articleDiv.appendChild(description2);
+            articleDiv.appendChild(createdAt);
+
+            articlesContainer.appendChild(articleDiv);
+        });
+    }
+</script>
+
+</body>
+</html>
